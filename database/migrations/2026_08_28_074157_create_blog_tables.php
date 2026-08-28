@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up(): void {
-        // Add is_admin to users if it doesn't exist
         if (!Schema::hasColumn('users', 'is_admin')) {
             Schema::table('users', function (Blueprint $table) {
                 $table->boolean('is_admin')->default(false)->after('password');
@@ -17,6 +16,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('title');
+            $table->string('slug')->unique(); // Unique slug column
             $table->text('body');
             $table->timestamps();
         });
@@ -25,6 +25,8 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('post_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            // Parent ID for replies (null if top-level comment)
+            $table->foreignId('parent_id')->nullable()->constrained('comments')->cascadeOnDelete();
             $table->text('body');
             $table->boolean('is_approved')->default(false);
             $table->timestamps();
@@ -34,10 +36,5 @@ return new class extends Migration {
     public function down(): void {
         Schema::dropIfExists('comments');
         Schema::dropIfExists('posts');
-        if (Schema::hasColumn('users', 'is_admin')) {
-            Schema::table('users', function (Blueprint $table) {
-                $table->dropColumn('is_admin');
-            });
-        }
     }
 };
