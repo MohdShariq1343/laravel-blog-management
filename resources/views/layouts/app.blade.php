@@ -119,6 +119,9 @@
                             </li>
                         @endif
                     @endauth
+                    <li class="nav-item">
+                        <a class="nav-link fw-medium {{ request()->routeIs('disburse.index') ? 'active' : '' }}" href="{{ route('disburse.index') }}">Datatable</a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav ms-auto align-items-lg-center gap-2 mt-3 mt-lg-0">
                     @guest

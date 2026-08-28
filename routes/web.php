@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\DisburseController;
 
 Route::get('/', [PostController::class, 'index'])->name('posts.index');
 // Route uses {slug} parameter instead of {id}
@@ -25,3 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/comments', [CommentController::class, 'pending'])->name('admin.comments.index');
     Route::patch('/admin/comments/{commentId}/approve', [CommentController::class, 'approve'])->name('admin.comments.approve');
 });
+
+
+Route::get('/disburse', [DisburseController::class, 'index'])->name('disburse.index');
+Route::post('/disburse/get-all', [DisburseController::class, 'getAllDisburse'])->name('disburse.get_all');
